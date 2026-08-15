@@ -145,7 +145,15 @@ export function SiteRenderer({ config, mode, slug }: Props) {
               {config.meta.siteName}
             </h1>
             {config.meta.tagline && (
-              <p className="font-theme-sans text-xs font-medium uppercase tracking-[0.35em] text-white/70 sm:text-sm">
+              // Letterspacing shreds Devanagari (matras detach from letters),
+              // so Indic taglines render at natural spacing instead.
+              <p
+                className={`font-theme-sans text-white/70 ${
+                  /[ऀ-ॿ]/.test(config.meta.tagline)
+                    ? "text-sm tracking-wide sm:text-lg"
+                    : "text-xs font-medium uppercase tracking-[0.35em] sm:text-sm"
+                }`}
+              >
                 {config.meta.tagline}
               </p>
             )}
