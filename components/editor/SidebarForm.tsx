@@ -6,7 +6,6 @@ import { widgetRegistry, WIDGET_ORDER } from "@/lib/widgets/registry";
 import { FontPicker } from "@/components/editor/FontPicker";
 import { ImageUploadField } from "@/components/editor/ImageUploadField";
 import { PlaylistField } from "@/components/editor/PlaylistField";
-import { ThemePicker } from "@/components/editor/ThemePicker";
 import { Toggle } from "@/components/ui/Toggle";
 
 function Section({
@@ -70,11 +69,7 @@ export function SidebarForm({ siteId }: { siteId: string }) {
         />
       </Section>
 
-      <Section title="Theme">
-        <ThemePicker />
-      </Section>
-
-      <Section title="Font">
+      <Section title="Title font">
         <FontPicker />
       </Section>
 

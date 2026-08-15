@@ -4,7 +4,7 @@ import { Controller, useFormContext } from "react-hook-form";
 import type { SiteConfig } from "@/lib/site-config";
 
 const options: { id: SiteConfig["fontId"]; label: string; previewClass: string }[] = [
-  { id: "auto", label: "Theme default", previewClass: "" },
+  { id: "auto", label: "Yatra (default)", previewClass: "font-display" },
   { id: "serif", label: "Serif", previewClass: "font-theme-serif" },
   { id: "sans", label: "Sans", previewClass: "font-theme-sans" },
   { id: "mono", label: "Mono", previewClass: "font-theme-mono" },

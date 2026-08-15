@@ -27,7 +27,8 @@ function socialPills(social: SiteConfig["widgets"]["social"]) {
   return pills;
 }
 
-const FONT_CLASSES = {
+const TITLE_FONT_CLASSES = {
+  auto: "font-display",
   serif: "font-theme-serif",
   sans: "font-theme-sans",
   mono: "font-theme-mono",
@@ -35,10 +36,7 @@ const FONT_CLASSES = {
 
 export function SiteRenderer({ config, mode, slug }: Props) {
   const theme = themes[config.themeId] ?? themes.barbershop;
-  const fontClass =
-    config.fontId === "auto"
-      ? theme.fontClass
-      : FONT_CLASSES[config.fontId];
+  const titleFontClass = TITLE_FONT_CLASSES[config.fontId] ?? "font-display";
   const bgImage = config.images.background ?? config.images.hero;
 
   const whatsappDigits =
@@ -54,7 +52,7 @@ export function SiteRenderer({ config, mode, slug }: Props) {
   return (
     <div
       style={theme.vars as React.CSSProperties}
-      className={`w-full ${fontClass} ${mode === "preview" ? "h-full" : "min-h-full"}`}
+      className={`w-full ${theme.fontClass} ${mode === "preview" ? "h-full" : "min-h-full"}`}
     >
       {/* Preview fills its scaled frame exactly; live pages fill the viewport */}
       <section
@@ -133,7 +131,9 @@ export function SiteRenderer({ config, mode, slug }: Props) {
                 className="h-16 w-16 rounded-full border border-white/20 object-cover shadow-lg"
               />
             )}
-            <h1 className="font-display max-w-4xl text-6xl leading-[1.05] tracking-tight drop-shadow-[0_4px_24px_rgba(0,0,0,0.6)] sm:text-8xl">
+            <h1
+              className={`${titleFontClass} max-w-4xl text-6xl leading-[1.05] tracking-tight drop-shadow-[0_4px_24px_rgba(0,0,0,0.6)] sm:text-8xl`}
+            >
               {config.meta.siteName}
             </h1>
             {config.meta.tagline && (
@@ -189,8 +189,15 @@ export function SiteRenderer({ config, mode, slug }: Props) {
             )}
           </div>
 
-          <footer className="font-theme-sans flex items-center justify-center gap-1.5 pb-4 text-[10px] uppercase tracking-[0.3em] text-white/40">
-            made with <LogoMark size={12} /> rediyo.in
+          <footer className="pb-4 text-center">
+            <a
+              href={`${(process.env.NEXT_PUBLIC_ROOT_DOMAIN ?? "").includes("lvh.me") ? "http" : "https"}://${process.env.NEXT_PUBLIC_ROOT_DOMAIN}?utm_source=badge&utm_medium=made-with`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-theme-sans inline-flex items-center gap-1.5 text-[10px] uppercase tracking-[0.3em] text-white/40 transition-colors hover:text-white/80"
+            >
+              made with <LogoMark size={12} /> rediyo.in
+            </a>
           </footer>
 
           {config.widgets.reactions.enabled && (
