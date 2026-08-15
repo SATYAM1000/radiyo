@@ -7,6 +7,7 @@
    bridge through YouTube's widget postMessage API. */
 
 import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { Pause, Play, SkipBack, SkipForward } from "lucide-react";
 import { track } from "@/lib/analytics";
 
@@ -136,8 +137,14 @@ export function YouTubePlayer({ embedUrl }: Props) {
           style={{ animationPlayState: playing ? "running" : "paused" }}
         >
           {thumb ? (
-            // eslint-disable-next-line @next/next/no-img-element -- YouTube CDN thumbnail
-            <img src={thumb} alt="" className="h-full w-full object-cover" />
+            <Image
+              src={thumb}
+              alt=""
+              width={96}
+              height={96}
+              quality={75}
+              className="h-full w-full object-cover"
+            />
           ) : (
             <div className="flex h-full w-full items-center justify-center bg-white/10 text-lg">
               📻

@@ -5,6 +5,7 @@
    Layout: one immersive full-viewport hero — background image under a dark
    gradient, poster-size display title, floating glass pill widgets.
    Everything fits the first screen; there is nothing to scroll to. */
+import Image from "next/image";
 import { LogoMark } from "@/components/Logo";
 import { themes } from "@/lib/themes";
 import type { SiteConfig } from "@/lib/site-config";
@@ -61,10 +62,15 @@ export function SiteRenderer({ config, mode, slug }: Props) {
         }`}
       >
         {bgImage && (
-          <div
+          <Image
+            src={bgImage}
+            alt=""
+            fill
+            priority
+            quality={70}
+            sizes="100vw"
+            className="object-cover"
             aria-hidden
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url(${bgImage})` }}
           />
         )}
         <div
@@ -124,10 +130,12 @@ export function SiteRenderer({ config, mode, slug }: Props) {
           {/* Center stage */}
           <div className="flex flex-1 flex-col items-center justify-center gap-6 px-4 py-8 text-center sm:px-6">
             {config.images.logo && (
-              // eslint-disable-next-line @next/next/no-img-element -- user-supplied remote URL
-              <img
+              <Image
                 src={config.images.logo}
                 alt=""
+                width={64}
+                height={64}
+                quality={80}
                 className="h-16 w-16 rounded-full border border-white/20 object-cover shadow-lg"
               />
             )}
