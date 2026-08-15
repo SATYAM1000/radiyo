@@ -11,7 +11,7 @@ const demoConfig: SiteConfig = {
     tagline: "गली के उस मोड़ पर · since 2004",
     aboutText: "",
   },
-  images: { hero: "/dev-bg.svg", background: null, logo: null },
+  images: { hero: "/gallery/audio-centre.jpg", background: null, logo: null },
   themeId: "barbershop",
   playlist: {
     provider: "youtube",

@@ -1,5 +1,6 @@
 "use client";
 
+import { Check, Loader2 } from "lucide-react";
 import { useEffect, useState, useTransition } from "react";
 import {
   checkSlugAvailable,
@@ -97,11 +98,23 @@ export function CreateSiteForm() {
                   : undefined)
               }
             />
-            <p className="mt-1 text-xs text-[#2a2118]/50">
+            <p className="mt-1 flex items-center gap-1 text-xs text-[#2a2118]/50">
               {effectiveSlug || "yourname"}.
               {process.env.NEXT_PUBLIC_ROOT_DOMAIN?.split(":")[0]}
-              {checking && " · checking…"}
-              {slugOk && " · available ✓"}
+              {checking && (
+                <>
+                  <span>·</span>
+                  <Loader2 size={12} className="animate-spin" />
+                  checking…
+                </>
+              )}
+              {slugOk && (
+                <span className="flex items-center gap-1 font-medium text-green-700">
+                  <span className="text-[#2a2118]/50">·</span>
+                  <Check size={13} strokeWidth={3} />
+                  available
+                </span>
+              )}
             </p>
           </div>
           {serverError && <p className="text-sm text-red-700">{serverError}</p>}

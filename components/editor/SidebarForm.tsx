@@ -3,6 +3,7 @@
 import { Controller, useFormContext } from "react-hook-form";
 import type { SiteConfig } from "@/lib/site-config";
 import { widgetRegistry, WIDGET_ORDER } from "@/lib/widgets/registry";
+import { FontPicker } from "@/components/editor/FontPicker";
 import { ImageUploadField } from "@/components/editor/ImageUploadField";
 import { PlaylistField } from "@/components/editor/PlaylistField";
 import { ThemePicker } from "@/components/editor/ThemePicker";
@@ -54,17 +55,27 @@ export function SidebarForm({ siteId }: { siteId: string }) {
       </Section>
 
       <Section title="Images">
-        <ImageUploadField siteId={siteId} name="images.hero" label="Hero image" />
+        <ImageUploadField
+          siteId={siteId}
+          name="images.hero"
+          label="Hero image"
+          gallery
+        />
         <ImageUploadField siteId={siteId} name="images.logo" label="Logo" />
         <ImageUploadField
           siteId={siteId}
           name="images.background"
           label="Background (subtle, behind everything)"
+          gallery
         />
       </Section>
 
       <Section title="Theme">
         <ThemePicker />
+      </Section>
+
+      <Section title="Font">
+        <FontPicker />
       </Section>
 
       <Section title="Music">

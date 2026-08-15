@@ -27,8 +27,18 @@ function socialPills(social: SiteConfig["widgets"]["social"]) {
   return pills;
 }
 
+const FONT_CLASSES = {
+  serif: "font-theme-serif",
+  sans: "font-theme-sans",
+  mono: "font-theme-mono",
+} as const;
+
 export function SiteRenderer({ config, mode, slug }: Props) {
   const theme = themes[config.themeId] ?? themes.barbershop;
+  const fontClass =
+    config.fontId === "auto"
+      ? theme.fontClass
+      : FONT_CLASSES[config.fontId];
   const bgImage = config.images.background ?? config.images.hero;
 
   const whatsappDigits =
@@ -44,7 +54,7 @@ export function SiteRenderer({ config, mode, slug }: Props) {
   return (
     <div
       style={theme.vars as React.CSSProperties}
-      className={`w-full ${theme.fontClass} ${mode === "preview" ? "h-full" : "min-h-full"}`}
+      className={`w-full ${fontClass} ${mode === "preview" ? "h-full" : "min-h-full"}`}
     >
       {/* Preview fills its scaled frame exactly; live pages fill the viewport */}
       <section

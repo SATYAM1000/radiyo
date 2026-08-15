@@ -6,6 +6,17 @@ function emptyOr<T extends z.ZodTypeAny>(schema: T) {
   return schema.optional().or(z.literal(""));
 }
 
+// Full URLs (user uploads via Storage) or root-relative paths (the built-in
+// gallery under /public). Anything else — including javascript: — is rejected.
+function imageSrc() {
+  return z
+    .string()
+    .url()
+    .or(z.string().regex(/^\/[a-zA-Z0-9_\-./]+$/))
+    .nullable()
+    .default(null);
+}
+
 export const THEME_IDS = [
   "barbershop",
   "cassette",
@@ -30,11 +41,13 @@ export const siteConfigSchema = z.object({
     aboutText: z.string().max(5000).default(""),
   }),
   images: z.object({
-    hero: z.string().url().nullable().default(null),
-    background: z.string().url().nullable().default(null),
-    logo: z.string().url().nullable().default(null),
+    hero: imageSrc(),
+    background: imageSrc(),
+    logo: imageSrc(),
   }),
   themeId: z.enum(THEME_IDS).default("barbershop"),
+  // Body font: "auto" follows the theme's pairing; the rest override it.
+  fontId: z.enum(["auto", "serif", "sans", "mono"]).default("auto"),
   playlist: playlistSchema.nullable().default(null),
   widgets: z.object({
     clock: z.object({
@@ -98,6 +111,7 @@ export function defaultConfig(siteName: string): SiteConfig {
     meta: { siteName, tagline: "", aboutText: "" },
     images: { hero: null, background: null, logo: null },
     themeId: "barbershop",
+    fontId: "auto",
     playlist: null,
     widgets: {
       clock: { enabled: true, format: "12h" },

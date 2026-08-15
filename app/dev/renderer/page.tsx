@@ -11,7 +11,7 @@ export default async function RendererDevPage({
   const { theme } = await searchParams;
   const config: SiteConfig = {
     ...defaultConfig("Deluxe Hair Saloon"),
-    images: { hero: "/dev-bg.svg", background: null, logo: null },
+    images: { hero: "/gallery/deluxe-hair-saloon.jpg", background: null, logo: null },
     meta: {
       siteName: "डीलक्स सैलून",
       tagline: "गली के उस मोड़ पर · since 2004",
@@ -55,5 +55,9 @@ export default async function RendererDevPage({
     },
   };
 
-  return <SiteRenderer config={config} mode="preview" />;
+  return (
+    <div className="h-svh">
+      <SiteRenderer config={config} mode="preview" />
+    </div>
+  );
 }
