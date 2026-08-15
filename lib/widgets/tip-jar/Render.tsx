@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { track } from "@/lib/analytics";
 import type { WidgetRenderProps } from "@/lib/widgets/types";
 
 /* One-tap UPI tip: on phones it deep-links straight into the visitor's UPI
@@ -10,6 +11,7 @@ export function TipJarRender({ config, site }: WidgetRenderProps<"tipJar">) {
   if (!config.upiId) return null;
 
   function tip() {
+    track("Tip Jar Clicked", { site: site.meta.siteName });
     navigator.clipboard?.writeText(config.upiId).catch(() => {});
     setCopied(true);
     setTimeout(() => setCopied(false), 2500);

@@ -8,6 +8,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { Pause, Play, SkipBack, SkipForward } from "lucide-react";
+import { track } from "@/lib/analytics";
 
 interface Props {
   embedUrl: string;
@@ -177,7 +178,10 @@ export function YouTubePlayer({ embedUrl }: Props) {
               )}
               <button
                 type="button"
-                onClick={() => command(playing ? "pauseVideo" : "playVideo")}
+                onClick={() => {
+                  if (!playing) track("Player Play", { title: info.title });
+                  command(playing ? "pauseVideo" : "playVideo");
+                }}
                 aria-label={playing ? "Pause" : "Play"}
                 className="flex h-10 w-10 items-center justify-center rounded-full border border-white/40 bg-[#f59e0b] text-black shadow-[0_0_20px_rgba(245,158,11,0.5)] transition-all hover:scale-110 hover:bg-[#fbbf24]"
               >

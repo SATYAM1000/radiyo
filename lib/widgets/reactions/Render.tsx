@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { RealtimeChannel } from "@supabase/supabase-js";
+import { track } from "@/lib/analytics";
 import { createClient } from "@/lib/supabase/client";
 import type { WidgetRenderProps } from "@/lib/widgets/types";
 
@@ -56,6 +57,7 @@ export function ReactionsRender({
     setTimeout(() => {
       cooling.current = false;
     }, 300);
+    track("Reaction Sent", { emoji, slug });
     if (channelRef.current) {
       channelRef.current.send({
         type: "broadcast",

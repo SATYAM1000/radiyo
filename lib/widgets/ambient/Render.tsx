@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import { track } from "@/lib/analytics";
 import {
   AMBIENT_LABELS,
   startAmbient,
@@ -36,6 +37,7 @@ export function AmbientRender({ config }: WidgetRenderProps<"ambient">) {
     } else {
       handleRef.current = startAmbient(config.sound);
       setOn(true);
+      track("Ambient On", { sound: config.sound });
     }
   }
 

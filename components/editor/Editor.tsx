@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import {
   FormProvider,
   useForm,
@@ -12,9 +12,17 @@ import {
   publishSite,
   unpublishSite,
 } from "@/app/(app)/editor/[siteId]/actions";
+import { track } from "@/lib/analytics";
 import { siteConfigSchema, type SiteConfig } from "@/lib/site-config";
 import { useAutosave } from "@/lib/hooks/useAutosave";
-import { Check, CircleAlert, Loader2 } from "lucide-react";
+import {
+  Check,
+  CircleAlert,
+  Copy,
+  ExternalLink,
+  Loader2,
+  X,
+} from "lucide-react";
 import { SidebarForm } from "@/components/editor/SidebarForm";
 import { PreviewPane } from "@/components/editor/PreviewPane";
 import { SiteRenderer } from "@/components/renderer/SiteRenderer";
@@ -49,7 +57,16 @@ export function Editor({ siteId, slug, isPublished, initialConfig }: Props) {
   const [publishResult, setPublishResult] = useState<
     { url: string } | { error: string } | null
   >(null);
+  const [copied, setCopied] = useState(false);
   const [pending, startTransition] = useTransition();
+
+  // Success toast auto-dismisses; errors stay until closed.
+  useEffect(() => {
+    if (publishResult && "url" in publishResult) {
+      const t = setTimeout(() => setPublishResult(null), 10000);
+      return () => clearTimeout(t);
+    }
+  }, [publishResult]);
 
   function onPublish() {
     setPublishResult(null);
@@ -58,6 +75,7 @@ export function Editor({ siteId, slug, isPublished, initialConfig }: Props) {
       if (result.url) {
         setPublished(true);
         setPublishResult({ url: result.url });
+        track("Site Published", { slug });
       } else {
         setPublishResult({ error: result.error ?? "Publish failed" });
       }
@@ -106,26 +124,6 @@ export function Editor({ siteId, slug, isPublished, initialConfig }: Props) {
             </div>
           </div>
 
-          {publishResult && (
-            <div className="border-b border-[#2a2118]/10 px-4 py-2 text-sm">
-              {"url" in publishResult ? (
-                <p className="text-green-800">
-                  Live at{" "}
-                  <a
-                    href={publishResult.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-mono underline"
-                  >
-                    {publishResult.url.replace(/^https?:\/\//, "")}
-                  </a>
-                </p>
-              ) : (
-                <p className="text-red-700">{publishResult.error}</p>
-              )}
-            </div>
-          )}
-
           <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
             <SidebarForm siteId={siteId} />
           </div>
@@ -137,6 +135,85 @@ export function Editor({ siteId, slug, isPublished, initialConfig }: Props) {
             <SiteRenderer config={config} mode="preview" slug={slug} />
           </PreviewPane>
         </div>
+
+        {/* Publish toast */}
+        {publishResult && (
+          <div className="fixed bottom-6 right-6 z-50 w-96 max-w-[calc(100vw-3rem)] animate-quote-fade rounded-2xl border bg-white p-4 shadow-2xl ring-1 ring-black/5">
+            {"url" in publishResult ? (
+              <div className="flex flex-col gap-3">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="flex h-8 w-8 items-center justify-center rounded-full bg-green-600/10">
+                      <Check size={16} className="text-green-700" strokeWidth={3} />
+                    </span>
+                    <div>
+                      <p className="text-sm font-semibold text-[#2a2118]">
+                        Your radio is live!
+                      </p>
+                      <p className="truncate font-mono text-xs text-[#2a2118]/60">
+                        {publishResult.url.replace(/^https?:\/\//, "")}
+                      </p>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    aria-label="Dismiss"
+                    onClick={() => setPublishResult(null)}
+                    className="text-[#2a2118]/40 hover:text-[#2a2118]"
+                  >
+                    <X size={16} />
+                  </button>
+                </div>
+                <div className="flex gap-2">
+                  <a
+                    href={publishResult.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex flex-1 items-center justify-center gap-1.5 rounded-md bg-[#b3402a] px-3 py-2 text-sm font-medium text-[#faf6ef] hover:bg-[#9a3624]"
+                  >
+                    <ExternalLink size={14} /> Open
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard
+                        ?.writeText(publishResult.url)
+                        .catch(() => {});
+                      setCopied(true);
+                      setTimeout(() => setCopied(false), 2000);
+                    }}
+                    className="flex flex-1 items-center justify-center gap-1.5 rounded-md border border-[#2a2118]/20 px-3 py-2 text-sm font-medium text-[#2a2118] hover:bg-[#2a2118]/5"
+                  >
+                    {copied ? (
+                      <>
+                        <Check size={14} className="text-green-700" /> Copied
+                      </>
+                    ) : (
+                      <>
+                        <Copy size={14} /> Copy link
+                      </>
+                    )}
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <div className="flex items-start justify-between gap-2">
+                <div className="flex items-center gap-2">
+                  <CircleAlert size={18} className="shrink-0 text-red-700" />
+                  <p className="text-sm text-red-800">{publishResult.error}</p>
+                </div>
+                <button
+                  type="button"
+                  aria-label="Dismiss"
+                  onClick={() => setPublishResult(null)}
+                  className="text-[#2a2118]/40 hover:text-[#2a2118]"
+                >
+                  <X size={16} />
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
     </FormProvider>
   );
