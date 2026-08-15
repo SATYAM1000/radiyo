@@ -71,8 +71,15 @@ export const siteConfigSchema = z.object({
     }),
     // .default() keeps configs saved before these widgets existed parseable.
     reactions: z
-      .object({ enabled: z.boolean() })
-      .default({ enabled: false }),
+      .object({
+        enabled: z.boolean(),
+        emojis: z
+          .array(z.string().min(1).max(8))
+          .min(1)
+          .max(6)
+          .default(["🔥", "❤️", "😂", "🥹", "💈"]),
+      })
+      .default({ enabled: false, emojis: ["🔥", "❤️", "😂", "🥹", "💈"] }),
     tipJar: z
       .object({
         enabled: z.boolean(),
@@ -122,7 +129,7 @@ export function defaultConfig(siteName: string): SiteConfig {
       },
       visitorCounter: { enabled: true, label: "people vibing here" },
       faq: { enabled: false, items: [] },
-      reactions: { enabled: true },
+      reactions: { enabled: true, emojis: ["🔥", "❤️", "😂", "🥹", "💈"] },
       tipJar: { enabled: false, upiId: "", buttonText: "🍵 Chai pilao" },
       dayNight: { enabled: true },
       ambient: { enabled: false, sound: "rain" },

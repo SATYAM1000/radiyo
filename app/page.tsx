@@ -33,7 +33,7 @@ const demoConfig: SiteConfig = {
     },
     visitorCounter: { enabled: true, label: "people vibing here" },
     faq: { enabled: false, items: [] },
-    reactions: { enabled: true },
+    reactions: { enabled: true, emojis: ["🔥", "❤️", "😂", "🥹", "💈"] },
     tipJar: { enabled: true, upiId: "demo@upi", buttonText: "🍵 Chai pilao" },
     dayNight: { enabled: false },
     ambient: { enabled: true, sound: "rain" },

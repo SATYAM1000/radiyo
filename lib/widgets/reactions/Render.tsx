@@ -5,8 +5,6 @@ import type { RealtimeChannel } from "@supabase/supabase-js";
 import { createClient } from "@/lib/supabase/client";
 import type { WidgetRenderProps } from "@/lib/widgets/types";
 
-const EMOJIS = ["🔥", "❤️", "😂", "🥹", "💈"];
-
 interface FloatingEmoji {
   id: number;
   emoji: string;
@@ -15,7 +13,12 @@ interface FloatingEmoji {
 
 /* Emoji bar in the corner; a tap broadcasts over a Supabase Realtime channel
    so the emoji floats up on EVERY viewer's screen at the same moment. */
-export function ReactionsRender({ mode, slug }: WidgetRenderProps<"reactions">) {
+export function ReactionsRender({
+  config,
+  mode,
+  slug,
+}: WidgetRenderProps<"reactions">) {
+  const emojis = config.emojis;
   const [floats, setFloats] = useState<FloatingEmoji[]>([]);
   const channelRef = useRef<RealtimeChannel | null>(null);
   const idRef = useRef(0);
@@ -36,7 +39,7 @@ export function ReactionsRender({ mode, slug }: WidgetRenderProps<"reactions">) 
     });
     channel.on("broadcast", { event: "reaction" }, (msg) => {
       const emoji = (msg.payload as { emoji?: string })?.emoji;
-      if (emoji && EMOJIS.includes(emoji)) spawn(emoji);
+      if (emoji && emojis.includes(emoji)) spawn(emoji);
     });
     channel.subscribe();
     channelRef.current = channel;
@@ -44,7 +47,8 @@ export function ReactionsRender({ mode, slug }: WidgetRenderProps<"reactions">) 
       supabase.removeChannel(channel);
       channelRef.current = null;
     };
-  }, [mode, slug, spawn]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- emojis list identity changes per render; membership check reads latest via closure re-subscribe on slug/mode only
+  }, [mode, slug, spawn, emojis.join("")]);
 
   function send(emoji: string) {
     if (cooling.current) return; // gentle rate limit
@@ -80,7 +84,7 @@ export function ReactionsRender({ mode, slug }: WidgetRenderProps<"reactions">) 
         ))}
       </div>
       <div className="absolute bottom-4 right-4 flex items-center gap-0.5 rounded-full border border-white/10 bg-black/45 px-2 py-1.5 backdrop-blur-sm">
-        {EMOJIS.map((emoji) => (
+        {emojis.map((emoji) => (
           <button
             key={emoji}
             type="button"

@@ -41,7 +41,7 @@ export default async function RendererDevPage({
       },
       visitorCounter: { enabled: true, label: "people vibing here" },
       ambient: { enabled: true, sound: "rain" as const },
-      reactions: { enabled: true },
+      reactions: { enabled: true, emojis: ["🔥", "❤️", "😂", "🥹", "💈"] },
       tipJar: { enabled: true, upiId: "satyam@upi", buttonText: "🍵 Chai pilao" },
       dayNight: { enabled: true },
       faq: {
