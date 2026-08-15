@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { Logo } from "@/components/Logo";
-import { SignOutButton } from "@/components/SignOutButton";
+import { UserMenu } from "@/components/UserMenu";
 
 export default async function AppLayout({
   children,
@@ -23,10 +23,13 @@ export default async function AppLayout({
         <Link href="/dashboard">
           <Logo />
         </Link>
-        <div className="flex items-center gap-4 text-sm">
-          <span className="text-[#2a2118]/50">{user.email}</span>
-          <SignOutButton />
-        </div>
+        <UserMenu
+          email={user.email ?? ""}
+          avatarUrl={
+            (user.user_metadata?.avatar_url as string | undefined) ??
+            (user.user_metadata?.picture as string | undefined)
+          }
+        />
       </header>
       {children}
     </div>
