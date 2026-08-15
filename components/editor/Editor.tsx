@@ -20,6 +20,7 @@ import {
   CircleAlert,
   Copy,
   ExternalLink,
+  Globe,
   Loader2,
   X,
 } from "lucide-react";
@@ -50,6 +51,9 @@ export function Editor({ siteId, slug, isPublished, initialConfig }: Props) {
     defaultValues: initialConfig,
     mode: "onChange",
   });
+
+  const domain = process.env.NEXT_PUBLIC_ROOT_DOMAIN ?? "";
+  const liveUrl = `${domain.includes("lvh.me") ? "http" : "https"}://${slug}.${domain}`;
 
   const config = useWatch({ control: form.control }) as SiteConfig;
   const saveState = useAutosave(siteId, config);
@@ -123,6 +127,30 @@ export function Editor({ siteId, slug, isPublished, initialConfig }: Props) {
               </Button>
             </div>
           </div>
+
+          {/* Persistent live URL while published */}
+          {published && (
+            <div className="flex items-center gap-2 border-b border-[#2a2118]/10 bg-green-700/5 px-4 py-2 text-xs">
+              <Globe size={13} className="shrink-0 text-green-700" />
+              <a
+                href={liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="min-w-0 truncate font-mono text-[#2a2118]/80 underline-offset-2 hover:underline"
+              >
+                {liveUrl.replace(/^https?:\/\//, "")}
+              </a>
+              <a
+                href={liveUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Open live site"
+                className="ml-auto shrink-0 text-[#2a2118]/40 hover:text-[#2a2118]"
+              >
+                <ExternalLink size={13} />
+              </a>
+            </div>
+          )}
 
           <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4">
             <SidebarForm siteId={siteId} />
