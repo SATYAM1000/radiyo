@@ -1,10 +1,10 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { Image as ImageIcon, X } from "lucide-react";
+import { Check, Copy, Image as ImageIcon, Sparkles, X } from "lucide-react";
 import { Controller, useFormContext } from "react-hook-form";
 import { createClient } from "@/lib/supabase/client";
-import { GALLERY_IMAGES } from "@/lib/gallery";
+import { GALLERY_IMAGES, GALLERY_PROMPT } from "@/lib/gallery";
 import type { SiteConfig } from "@/lib/site-config";
 
 type ImageFieldName = "images.hero" | "images.logo" | "images.background";
@@ -43,6 +43,7 @@ export function ImageUploadField({
   const inputRef = useRef<HTMLInputElement>(null);
   const [status, setStatus] = useState<"idle" | "uploading" | "error">("idle");
   const [galleryOpen, setGalleryOpen] = useState(false);
+  const [promptCopied, setPromptCopied] = useState(false);
 
   return (
     <Controller
@@ -141,6 +142,43 @@ export function ImageUploadField({
                       </span>
                     </button>
                   ))}
+                </div>
+
+                {/* Generate-your-own guidance */}
+                <div className="mt-4 rounded-lg border border-[#2a2118]/10 bg-[#2a2118]/[0.03] p-3">
+                  <p className="flex items-center gap-1.5 text-xs font-semibold text-[#2a2118]">
+                    <Sparkles size={13} className="text-[#b3402a]" />
+                    Want your own scene? Generate it with ChatGPT
+                  </p>
+                  <p className="mt-1 text-xs text-[#2a2118]/60">
+                    Copy this prompt, replace the [YOUR SHOP] part with your
+                    place — a tea stall, a game parlour, your studio — then
+                    upload the result here.
+                  </p>
+                  <p className="mt-2 max-h-20 overflow-y-auto rounded bg-white p-2 font-mono text-[10px] leading-relaxed text-[#2a2118]/70">
+                    {GALLERY_PROMPT}
+                  </p>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      navigator.clipboard
+                        ?.writeText(GALLERY_PROMPT)
+                        .catch(() => {});
+                      setPromptCopied(true);
+                      setTimeout(() => setPromptCopied(false), 2000);
+                    }}
+                    className="mt-2 flex items-center gap-1.5 rounded-md border border-[#2a2118]/20 px-3 py-1.5 text-xs font-medium text-[#2a2118] hover:bg-[#2a2118]/5"
+                  >
+                    {promptCopied ? (
+                      <>
+                        <Check size={13} className="text-green-700" /> Copied!
+                      </>
+                    ) : (
+                      <>
+                        <Copy size={13} /> Copy prompt
+                      </>
+                    )}
+                  </button>
                 </div>
               </div>
             </div>
