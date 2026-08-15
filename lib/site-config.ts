@@ -46,8 +46,10 @@ export const siteConfigSchema = z.object({
     logo: imageSrc(),
   }),
   themeId: z.enum(THEME_IDS).default("barbershop"),
-  // Body font: "auto" follows the theme's pairing; the rest override it.
-  fontId: z.enum(["auto", "serif", "sans", "mono"]).default("auto"),
+  // Hero title font. "auto" = Yatra One; sans/mono kept for older configs.
+  fontId: z
+    .enum(["auto", "serif", "sans", "mono", "baloo", "modak", "teko", "anek"])
+    .default("auto"),
   playlist: playlistSchema.nullable().default(null),
   widgets: z.object({
     clock: z.object({

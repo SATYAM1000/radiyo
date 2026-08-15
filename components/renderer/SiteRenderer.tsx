@@ -33,6 +33,10 @@ const TITLE_FONT_CLASSES = {
   serif: "font-theme-serif",
   sans: "font-theme-sans",
   mono: "font-theme-mono",
+  baloo: "font-baloo",
+  modak: "font-modak",
+  teko: "font-teko",
+  anek: "font-anek",
 } as const;
 
 export function SiteRenderer({ config, mode, slug }: Props) {

@@ -36,6 +36,22 @@ button:not(:disabled) {
 .font-display {
   font-family: var(--font-display), var(--font-theme-serif), Georgia, serif;
 }
+.font-baloo {
+  font-family: var(--font-baloo), system-ui, sans-serif;
+  font-weight: 800;
+}
+.font-modak {
+  font-family: var(--font-modak), system-ui, sans-serif;
+  font-weight: 400;
+}
+.font-teko {
+  font-family: var(--font-teko), system-ui, sans-serif;
+  font-weight: 700;
+}
+.font-anek {
+  font-family: var(--font-anek), system-ui, sans-serif;
+  font-weight: 800;
+}
 
 /* Spinning CD album art — play-state driven inline */
 @keyframes cd-spin {

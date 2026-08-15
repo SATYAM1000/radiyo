@@ -1,7 +1,11 @@
 import {
+  Anek_Devanagari,
+  Baloo_2,
   IBM_Plex_Mono,
+  Modak,
   Rozha_One,
   Space_Grotesk,
+  Teko,
   Yatra_One,
 } from "next/font/google";
 
@@ -32,4 +36,26 @@ export const themeSans = Space_Grotesk({
   variable: "--font-theme-sans",
 });
 
-export const themeFontVariables = `${themeSerif.variable} ${themeMono.variable} ${themeSans.variable} ${displayFont.variable}`;
+// Extra heavy display faces for the hero title — all cover Devanagari too.
+export const balooFont = Baloo_2({
+  weight: "800",
+  subsets: ["latin", "devanagari"],
+  variable: "--font-baloo",
+});
+export const modakFont = Modak({
+  weight: "400", // Modak has one weight; it's naturally massive
+  subsets: ["latin", "devanagari"],
+  variable: "--font-modak",
+});
+export const tekoFont = Teko({
+  weight: "700",
+  subsets: ["latin", "devanagari"],
+  variable: "--font-teko",
+});
+export const anekFont = Anek_Devanagari({
+  weight: "800",
+  subsets: ["latin", "devanagari"],
+  variable: "--font-anek",
+});
+
+export const themeFontVariables = `${themeSerif.variable} ${themeMono.variable} ${themeSans.variable} ${displayFont.variable} ${balooFont.variable} ${modakFont.variable} ${tekoFont.variable} ${anekFont.variable}`;

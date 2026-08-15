@@ -5,9 +5,11 @@ import type { SiteConfig } from "@/lib/site-config";
 
 const options: { id: SiteConfig["fontId"]; label: string; previewClass: string }[] = [
   { id: "auto", label: "Yatra (default)", previewClass: "font-display" },
-  { id: "serif", label: "Serif", previewClass: "font-theme-serif" },
-  { id: "sans", label: "Sans", previewClass: "font-theme-sans" },
-  { id: "mono", label: "Mono", previewClass: "font-theme-mono" },
+  { id: "baloo", label: "Baloo", previewClass: "font-baloo" },
+  { id: "modak", label: "Modak", previewClass: "font-modak" },
+  { id: "teko", label: "Teko", previewClass: "font-teko" },
+  { id: "anek", label: "Anek", previewClass: "font-anek" },
+  { id: "serif", label: "Rozha", previewClass: "font-theme-serif" },
 ];
 
 export function FontPicker() {
@@ -31,9 +33,9 @@ export function FontPicker() {
               }`}
             >
               <span
-                className={`flex h-7 w-7 shrink-0 items-center justify-center rounded bg-[#2a2118]/5 text-sm ${option.previewClass}`}
+                className={`flex h-8 w-9 shrink-0 items-center justify-center rounded bg-[#2a2118]/5 text-base ${option.previewClass}`}
               >
-                Ag
+                अA
               </span>
               <span className="text-xs font-medium">{option.label}</span>
             </button>
